@@ -3,27 +3,32 @@ package poo.grupo5.Gui;
 import poo.grupo5.Logica.Control;
 
 import javax.swing.*;
+import java.awt.*;
 
-public class ConfigPanel extends JPanel {
+public class EdificiosPanel extends JPanel {
     private Gui parentFrame;
-    private JTextField edificioField;
-    private JButton continuarButton;
+    private Control control;
 
-    public ConfigPanel(Gui parentFrame, Control control) {
+    public EdificiosPanel(Gui parentFrame, Control control) {
+        this.control = control;
         this.parentFrame = parentFrame;
 
-        add(new JLabel("Ingrese la cantidad de edificios:"));
+        setLayout(new FlowLayout());
+        add(new JLabel("Ingrese la cantidad inicial de edificios:"));
 
-        edificioField = new JTextField(10);
-        add(edificioField);
+        JTextField edificioField = new JTextField(10);
+        add(edificioField, BorderLayout.CENTER);
 
-        continuarButton = new JButton("Continuar");
+       JButton continuarButton = new JButton("Continuar");
+        add(continuarButton, BorderLayout.CENTER);
         continuarButton.addActionListener(e -> {
             try {
                 int cantidad = Integer.parseInt(edificioField.getText().trim());
                 if (cantidad > 0) {
                     control.crearEdificios(cantidad);
-                    parentFrame.showPanel(Gui.VISTA_PRINCIPAL);
+                    control.crearCentroVehiculos();
+                    parentFrame.showPanel("distanciasPanel");
+                    parentFrame.showPanel(Gui.DistanciasPanel);
                 } else {
                     JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor a cero.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -31,6 +36,5 @@ public class ConfigPanel extends JPanel {
                 JOptionPane.showMessageDialog(this, "Debe ingresar un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-        add(continuarButton);
     }
 }

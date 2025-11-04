@@ -1,11 +1,16 @@
 package poo.grupo5.Logica;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import poo.grupo5.Excepciones.MiExcepcion;
-import poo.grupo5.Modelo.*;
-public class AdmVehiculos {
+import poo.grupo5.Modelo.Vehiculos.Dron;
+import poo.grupo5.Modelo.Vehiculos.EBike;
+import poo.grupo5.Modelo.Vehiculos.Rover;
+import poo.grupo5.Modelo.Vehiculos.Vehiculo;
+
+public class AdmVehiculos implements Serializable {
     private Collection<Vehiculo> listaVehiculos;
 
     public AdmVehiculos(){
@@ -78,6 +83,17 @@ public class AdmVehiculos {
         lista1.set(1, Rover.estimatedEnergyCost(lista1.get(1)));
         lista1.set(2, EBike.estimatedEnergyCost(lista1.get(2)));
         return lista1;
+    }
+
+    public int bateriaConsumida(ArrayList<Integer> lista1) {
+        lista1.set(0,Dron.estimatedEnergyCost(lista1.get(0)));
+        lista1.set(1, Rover.estimatedEnergyCost(lista1.get(1)));
+        lista1.set(2, EBike.estimatedEnergyCost(lista1.get(2)));
+        int resp = 0;
+        for(int actual: lista1){
+            resp += actual;
+        };
+        return resp;
     }
 
 }

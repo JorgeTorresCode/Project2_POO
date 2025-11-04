@@ -1,9 +1,12 @@
-package poo.grupo5.Modelo;
+package poo.grupo5.Modelo.Vehiculos;
 
 import poo.grupo5.Enumerates.EstadoVehiculo;
 import poo.grupo5.Interfaces.*;
+import poo.grupo5.Modelo.Pedido;
 
-public abstract class Vehiculo implements Trackable, Chargable {
+import java.io.Serializable;
+
+public abstract class Vehiculo implements Trackable, Chargable, Serializable {
     protected String id;
     protected int energia;
     protected Pedido tareaActual;

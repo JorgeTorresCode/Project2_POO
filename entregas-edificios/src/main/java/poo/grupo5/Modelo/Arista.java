@@ -1,18 +1,26 @@
 package poo.grupo5.Modelo;
 
+import poo.grupo5.Modelo.Estructuras.Estructura;
+
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Arista {
+public class Arista implements Serializable {
     private Estructura destino;
-    private double distancia;
+    private int distancia;
 
-    public Arista(Estructura destino, double distancia) {
+    public Arista(Estructura destino, int distancia) {
         this.destino = destino;
         this.distancia = distancia;
     }
 
     public Estructura getDestino() { return destino; }
     public double getDistancia() { return distancia; }
+
+    @Override
+    public String toString() {
+        return "Arista{" + "destino=" + destino + ", distancia=" + distancia + '}';
+    }
 
     @Override
     public boolean equals(Object o) {

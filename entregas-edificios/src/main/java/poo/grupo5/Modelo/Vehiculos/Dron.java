@@ -1,6 +1,8 @@
-package poo.grupo5.Modelo;
+package poo.grupo5.Modelo.Vehiculos;
 
-public class Dron extends Vehiculo {
+import java.io.Serializable;
+
+public class Dron extends Vehiculo implements Serializable {
     private static int consumoDistancia;
     private static double volumenMin;
     private static double volumenMax;

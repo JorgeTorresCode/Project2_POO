@@ -1,36 +1,42 @@
 package poo.grupo5.Logica;
 
-import poo.grupo5.Excepciones.MiExcepcion;
 import poo.grupo5.Modelo.*; // Incluye Estructura, Arista, CentroVehiculos
-import poo.grupo5.Excepciones.ICODIGOS;
+import poo.grupo5.Modelo.Estructuras.CentroVehiculos;
+import poo.grupo5.Modelo.Estructuras.Edificio;
+import poo.grupo5.Modelo.Estructuras.Estructura;
+
+import java.io.Serializable;
 import java.util.*;
 
-public class CampusMap {
+public class CampusMap implements Serializable {
     private Map<String, Estructura> puntos;
     private Map<String, ArrayList<Arista>> adyacencia;
     private CentroVehiculos centroVehiculos;
 
-    public CampusMap() {
+    public CampusMap () {
         this.puntos = new HashMap<>();
         this.adyacencia = new HashMap<>();
         this.centroVehiculos = new CentroVehiculos(1024);
     }
 
-    public void crearEstructura(boolean esCentro) {
-        Estructura nueva;
-        if (esCentro) nueva = new CentroVehiculos(1000);
-        else nueva = new Edificio();
+    public void crearEdificio() {
+        Estructura nueva =  new Edificio();
         puntos.put(nueva.getId(), nueva);
         adyacencia.put(nueva.getId(), new ArrayList<>());
     }
 
-    public boolean agregarAristaDoble(String origenId, String destinoId, double distancia) {
-        if (!puntos.containsKey(origenId) || !puntos.containsKey(destinoId) || distancia <= 0) return false;
+    public void crearCentro() {
+        Estructura nueva =  new CentroVehiculos(1000);
+        puntos.put(nueva.getId(), nueva);
+        adyacencia.put(nueva.getId(), new ArrayList<>());
+    }
+
+    public void agregarAristaDoble(String origenId, String destinoId, int distancia) {
+        if (!puntos.containsKey(origenId) || !puntos.containsKey(destinoId) || distancia <= 0) return;
         Estructura destino = puntos.get(destinoId);
         Estructura origen = puntos.get(origenId);
         adyacencia.get(origenId).add(new Arista(destino, distancia));
         adyacencia.get(destinoId).add(new Arista(origen, distancia));
-        return true;
     }
 
     public Estructura obtenerEstructura(String id) {
@@ -56,19 +62,30 @@ public class CampusMap {
         return null;
     }
 
-    public Vehiculo despacharVehiculoDesde(String centroId, double peso) throws MiExcepcion {
-        Estructura estructura = encontrarEstructura(centroId);
-        if (estructura == null || !estructura.esCentro()) {
-            throw new MiExcepcion(ICODIGOS.NoVehicleAvailableException);
+    public String mostrarEstructuras() {
+        StringBuilder sb = new StringBuilder();
+        for (Estructura e : puntos.values()) {
+            sb.append(e.toString());
+            sb.append("\n");
         }
+        return sb.toString();
+    }
 
-        CentroVehiculos centro = (CentroVehiculos) estructura;
-        return centro.buscarVehiculoIndicado();
+    public String mostrarAristas() {
+        StringBuilder sb = new StringBuilder();
+        for (Estructura est : puntos.values()) {
+            String id = est.getId();
+            for (Arista a : adyacencia.get(id)) {
+                sb.append(est.getId())
+                        .append(" -> ")
+                        .append(a.toString())
+                        .append("\n");
+            }
+        }
+        return sb.toString();
     }
 
     public Collection<Estructura> getPuntosDelCampus() {
         return puntos.values();
     }
-
-
 }

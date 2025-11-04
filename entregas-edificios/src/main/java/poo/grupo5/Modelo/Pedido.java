@@ -1,10 +1,12 @@
 package poo.grupo5.Modelo;
 
 import poo.grupo5.Enumerates.EstadoPedido;
+import poo.grupo5.Modelo.Estructuras.Edificio;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Pedido {
+public class Pedido implements Serializable {
     private String descripcion;
     private double peso;
     private Edificio origen;

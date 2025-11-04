@@ -10,22 +10,23 @@ public class Gui extends JFrame {
     private CardLayout cardLayout = new CardLayout();
     private JPanel cardPanel = new JPanel(cardLayout);
 
-    public static final String VISTA_PRINCIPAL = "Principal";
-    public static final String VISTA_CONFIGURACION = "Configuracion";
+    public static final String PrincipalPanel = "PrincipalPanel";
+    public static final String EdificiosPanel = "EdificiosPanel";
+    public static final String DistanciasPanel = "DistanciasPanel";
 
     public Gui() {
         setTitle("Gestión de la Aplicación");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        ConfigPanel configPanel = new ConfigPanel(this, control);
+        EdificiosPanel edificiosPanel = new EdificiosPanel(this, control);
         MainPanel mainPanel = new MainPanel(this, control);
+        DistanciasPanel distanciasPanel = new DistanciasPanel(this, control);
 
-        cardPanel.add(configPanel, VISTA_CONFIGURACION);
-        cardPanel.add(mainPanel, VISTA_PRINCIPAL);
+        cardPanel.add(edificiosPanel, EdificiosPanel);
+        cardPanel.add(mainPanel, PrincipalPanel);
+        cardPanel.add(distanciasPanel, DistanciasPanel);
 
         add(cardPanel);
-
-        showPanel(VISTA_CONFIGURACION);
-
+        showPanel(EdificiosPanel);
         pack();
         setLocationRelativeTo(null);
         setVisible(true);

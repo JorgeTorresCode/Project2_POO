@@ -21,7 +21,7 @@ public class MainPanel extends JPanel {
 
         JButton backButton = new JButton("⬅️ Volver a Configuración");
         backButton.addActionListener(e -> {
-            parentFrame.showPanel(Gui.VISTA_CONFIGURACION);
+            parentFrame.showPanel(Gui.DistanciasPanel);
         });
 
         JPanel controlPanel = new JPanel();
