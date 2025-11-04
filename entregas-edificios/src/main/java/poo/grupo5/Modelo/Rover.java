@@ -8,7 +8,7 @@ public class Rover extends Vehiculo {
 
     public Rover(){
         super();
-        this.setId(String.format("D-%03d", ultimoId++));
+        this.setId(String.format("R-%03d", ultimoId++));
     }
     public static void setConsumoDistancia(int consumoDistancia) {Rover.consumoDistancia = consumoDistancia;}
     public static void setVolumenMin (double volumenMin) {Rover.volumenMin = volumenMin;}
@@ -17,5 +17,5 @@ public class Rover extends Vehiculo {
     @Override
     public double getVolumenMin(){return volumenMin;}
     public double getVolumenMax(){return volumenMax;}
-    public int estimatedEnergyCost(int distancia){return distancia/10 *3;}
+    public static int estimatedEnergyCost(int distancia){return distancia/10 *consumoDistancia;}
 }

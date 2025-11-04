@@ -16,8 +16,9 @@ public class Dron extends Vehiculo {
     public static void setVolumenMin (double volumenMin) {Dron.volumenMin = volumenMin;}
     public static void setVolumenMax(double volumenMax) {Dron.volumenMax = volumenMax;}
 
+
     @Override
     public double getVolumenMin(){return volumenMin;}
     public double getVolumenMax(){return volumenMax;}
-    public int estimatedEnergyCost(int distancia){return distancia/10 *5;}
+    public static int estimatedEnergyCost(int distancia){return distancia/10 *consumoDistancia;}
 }

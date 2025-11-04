@@ -53,6 +53,7 @@ public class AdmVehiculos {
             double minVolTemp = vehiculo.getVolumenMin();
             int maxBatery = vehiculo.estimatedEnergyCost(distancia);
             if(maxVolTemp > peso && minVolTemp < peso && vehiculo.getEnergia() >= maxBatery ){
+                vehiculo.setEnergia(maxBatery);
                 return vehiculo;
             }
             if (mayorPeso < maxVolTemp) {mayorPeso = maxVolTemp;}
@@ -64,7 +65,19 @@ public class AdmVehiculos {
         if (menorConsumoBateria >= 100){throw new MiExcepcion(0);}
         throw new MiExcepcion(1);
     }
-    Carlos malas noticias;
-    Como los centros almacenan los vehiculos, esta clase ya no deberia existir;
-    Hay que implementar estos metodos en CampusMap .;
+
+    public void liberarVehiculo(String id) {
+        for (Vehiculo vehiculo : listaVehiculos) {
+            if (vehiculo.getId().equals(id)) {
+                vehiculo.setTareaActual(null);
+            }
+        }
+    }
+    public Collection<Integer> bateriaPorTipo(ArrayList<Integer> lista1) {
+        lista1.set(0,Dron.estimatedEnergyCost(lista1.get(0)));
+        lista1.set(1, Rover.estimatedEnergyCost(lista1.get(1)));
+        lista1.set(2, EBike.estimatedEnergyCost(lista1.get(2)));
+        return lista1;
+    }
+
 }

@@ -2,35 +2,57 @@ package poo.grupo5.Modelo;
 
 import poo.grupo5.Enumerates.EstadoPedido;
 
+import java.time.LocalDateTime;
+
 public class Pedido {
     private String descripcion;
     private double peso;
-    private String origen;
-    private String destino;
+    private Edificio origen;
+    private Edificio destino;
     private EstadoPedido estadoPedido;
-    private int distanciaRecorrida;
+    private int distanciaTotal;
+    private String vehiculoID;
+    private LocalDateTime fechaInicio;
+    private LocalDateTime fechaFin;
 
-    public Pedido(String descripcion, double peso, String origen, String destino) {
+    public Pedido(String descripcion, double peso, Edificio origen, Edificio destino,  String vehiculoID, int distancia) {
         this.descripcion = descripcion;
         this.peso = peso;
         this.origen = origen;
         this.destino = destino;
         this.estadoPedido = EstadoPedido.RECEPCION;
-        this.distanciaRecorrida = 0;
+        this.distanciaTotal = distancia;
+        this.vehiculoID = vehiculoID;
+    }
+
+    public void CambiarEtapa(){
+        switch (this.estadoPedido){
+            case RECEPCION: estadoPedido = EstadoPedido.PREPARACION; break;
+            case PREPARACION: estadoPedido = EstadoPedido.EN_CAMINO; break;
+            case EN_CAMINO: estadoPedido = EstadoPedido.ENTREGADO; break;
+            default: estadoPedido = EstadoPedido.RECEPCION; break;
+        }
     }
 
     public void asignarEstado(EstadoPedido nuevoEstado) {
         this.estadoPedido = nuevoEstado;
     }
 
-    public void actualizarDistancia(int distancia) {
-        if (distancia >= 0) {
-            this.distanciaRecorrida += distancia;
-        } else {
-            throw new IllegalArgumentException("La distancia no puede ser negativa.");
-        }
-    }
+    public void setFechaInicio(LocalDateTime fechaInicio) {this.fechaInicio = fechaInicio;}
+    public void setFechaFin(LocalDateTime fechaFin) {this.fechaFin = fechaFin;}
+
+
     public String getDescripcion() {
-        return 
+        return descripcion;
     }
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+    public EstadoPedido getEstadoPedido() {
+        return estadoPedido;
+    }
+    public String getVehiculoID() {return vehiculoID;}
+    public LocalDateTime getFechaInicio() {return fechaInicio;}
+    public LocalDateTime getFechaFin() {return fechaFin;}
+    public int getDistanciaTotal() {return distanciaTotal;}
 }

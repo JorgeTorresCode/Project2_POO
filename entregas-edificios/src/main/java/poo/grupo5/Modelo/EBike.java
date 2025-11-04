@@ -18,5 +18,5 @@ public class EBike extends Vehiculo {
     @Override
     public double getVolumenMin(){return volumenMin;}
     public double getVolumenMax(){return volumenMax;}
-    public int estimatedEnergyCost(int distancia){return distancia/10;}
+    public static int estimatedEnergyCost(int distancia){return distancia/10 *consumoDistancia;}
 }

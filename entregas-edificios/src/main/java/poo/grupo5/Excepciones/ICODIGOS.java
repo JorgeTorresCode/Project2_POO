@@ -5,4 +5,5 @@ public interface ICODIGOS {
     int NoVehicleAvailableException = 1;
     int ExcesiveVolumeException = 2;
     int LowVolumeException = 3;
+    int NoDeliveriesAvailableException = 4;
 }

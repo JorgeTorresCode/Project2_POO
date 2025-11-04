@@ -8,10 +8,12 @@ import java.util.*;
 public class CampusMap {
     private Map<String, Estructura> puntos;
     private Map<String, ArrayList<Arista>> adyacencia;
+    private CentroVehiculos centroVehiculos;
 
     public CampusMap() {
         this.puntos = new HashMap<>();
         this.adyacencia = new HashMap<>();
+        this.centroVehiculos = new CentroVehiculos(1024);
     }
 
     public void crearEstructura(boolean esCentro) {
@@ -67,4 +69,6 @@ public class CampusMap {
     public Collection<Estructura> getPuntosDelCampus() {
         return puntos.values();
     }
+
+
 }
