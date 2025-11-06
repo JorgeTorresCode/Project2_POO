@@ -1,91 +1,79 @@
 package poo.grupo5.Logica;
 
+import poo.grupo5.Excepciones.MiExcepcion;
 import poo.grupo5.Modelo.*; // Incluye Estructura, Arista, CentroVehiculos
 import poo.grupo5.Modelo.Estructuras.CentroVehiculos;
 import poo.grupo5.Modelo.Estructuras.Edificio;
 import poo.grupo5.Modelo.Estructuras.Estructura;
+import poo.grupo5.Modelo.Vehiculos.Vehiculo;
 
 import java.io.Serializable;
 import java.util.*;
 
 public class CampusMap implements Serializable {
-    private Map<String, Estructura> puntos;
     private Map<String, ArrayList<Arista>> adyacencia;
     private CentroVehiculos centroVehiculos;
 
     public CampusMap () {
-        this.puntos = new HashMap<>();
         this.adyacencia = new HashMap<>();
         this.centroVehiculos = new CentroVehiculos(1024);
     }
 
-    public void crearEdificio() {
-        Estructura nueva =  new Edificio();
-        puntos.put(nueva.getId(), nueva);
-        adyacencia.put(nueva.getId(), new ArrayList<>());
+    public void crearEdificio(String id) {
+        adyacencia.put(id, new ArrayList<>());
     }
 
     public void crearCentro() {
         Estructura nueva =  new CentroVehiculos(1000);
-        puntos.put(nueva.getId(), nueva);
+
         adyacencia.put(nueva.getId(), new ArrayList<>());
     }
 
-    public void agregarAristaDoble(String origenId, String destinoId, int distancia) {
-        if (!puntos.containsKey(origenId) || !puntos.containsKey(destinoId) || distancia <= 0) return;
-        Estructura destino = puntos.get(destinoId);
-        Estructura origen = puntos.get(origenId);
+    public void agregarAristaDoble(String origenId, String destinoId, int distancia, Estructura  origen, Estructura destino) {
+
         adyacencia.get(origenId).add(new Arista(destino, distancia));
         adyacencia.get(destinoId).add(new Arista(origen, distancia));
     }
 
-    public Estructura obtenerEstructura(String id) {
-        return puntos.get(id);
-    }
-
-    public double getDistanciaDirecta(String origenId, String destinoId) {
-        ArrayList<Arista> conexiones = adyacencia.get(origenId);
-        if (conexiones == null) return -1;
-        for (Arista a : conexiones) {
-            if (a.getDestino().getId().equals(destinoId))
-                return a.getDistancia();
-        }
-        return -1;
-    }
-
-    public CentroVehiculos getCentro() {
-        for (Estructura e : puntos.values()) {
-            if (e.esCentro()) {
-                return (CentroVehiculos) e;
-            }
-        }
-        return null;
-    }
-
-    public String mostrarEstructuras() {
-        StringBuilder sb = new StringBuilder();
-        for (Estructura e : puntos.values()) {
-            sb.append(e.toString());
-            sb.append("\n");
-        }
-        return sb.toString();
-    }
 
     public String mostrarAristas() {
         StringBuilder sb = new StringBuilder();
-        for (Estructura est : puntos.values()) {
-            String id = est.getId();
-            for (Arista a : adyacencia.get(id)) {
-                sb.append(est.getId())
+        for (Map.Entry<String, ArrayList<Arista>> entry : adyacencia.entrySet()) {
+            String id = entry.getKey();
+            ArrayList<Arista> aristas = entry.getValue();
+            for (Arista arista : aristas) {
+                String destinoId = arista.getDestino().getId();
+                sb.append(id)
                         .append(" -> ")
-                        .append(a.toString())
+                        .append(destinoId)
                         .append("\n");
             }
         }
         return sb.toString();
     }
 
-    public Collection<Estructura> getPuntosDelCampus() {
-        return puntos.values();
+    public void crearVehiculo(int tipo, int cantidad, double pesoMax, double pesoMin, int consumoBateria) {
+        centroVehiculos.crearVehiculo(tipo, cantidad, pesoMax, pesoMin, consumoBateria);
+    }
+
+    // Delegar la búsqueda de un vehículo según el peso y la distancia
+    public Vehiculo buscarVehiculoIndicado(int distancia, double peso) throws MiExcepcion {
+        return centroVehiculos.buscarVehiculoIndicado(distancia, peso);
+    }
+
+    // Delegar la liberación de un vehículo por su ID
+    public void liberarVehiculo(String id) {
+        centroVehiculos.liberarVehiculo(id);
+    }
+
+    // Delegar la obtención de la batería por tipo de vehículo
+    public Collection<Integer> bateriaPorTipo(ArrayList<Integer> lista1) {
+        return centroVehiculos.bateriaPorTipo(lista1);
+    }
+
+    // Delegar la batería consumida
+    public int bateriaConsumida(ArrayList<Integer> lista1) {
+        return centroVehiculos.bateriaConsumida(lista1);
     }
 }
+

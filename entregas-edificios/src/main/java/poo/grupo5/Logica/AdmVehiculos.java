@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import poo.grupo5.Enumerates.EstadoVehiculo;
 import poo.grupo5.Excepciones.MiExcepcion;
 import poo.grupo5.Modelo.Vehiculos.Dron;
 import poo.grupo5.Modelo.Vehiculos.EBike;
@@ -57,8 +58,8 @@ public class AdmVehiculos implements Serializable {
             double maxVolTemp = vehiculo.getVolumenMax();
             double minVolTemp = vehiculo.getVolumenMin();
             int maxBatery = vehiculo.estimatedEnergyCost(distancia);
-            if(maxVolTemp > peso && minVolTemp < peso && vehiculo.getEnergia() >= maxBatery ){
-                vehiculo.setEnergia(maxBatery);
+            if(maxVolTemp > peso && minVolTemp < peso && vehiculo.getEnergia() >= maxBatery && vehiculo.getEnergia() <= maxBatery && vehiculo.getEstado() == EstadoVehiculo.DISPONIBLE){
+                vehiculo.setEstado(EstadoVehiculo.EN_ENTREGA);
                 return vehiculo;
             }
             if (mayorPeso < maxVolTemp) {mayorPeso = maxVolTemp;}
@@ -74,7 +75,8 @@ public class AdmVehiculos implements Serializable {
     public void liberarVehiculo(String id) {
         for (Vehiculo vehiculo : listaVehiculos) {
             if (vehiculo.getId().equals(id)) {
-                vehiculo.setTareaActual(null);
+                vehiculo.setEstado(EstadoVehiculo.DISPONIBLE);
+                if (vehiculo.getEnergia() <= 15) {vehiculo.charge();}
             }
         }
     }

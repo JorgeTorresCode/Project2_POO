@@ -31,4 +31,9 @@ public abstract class Vehiculo implements Trackable, Chargable, Serializable {
     public abstract double getVolumenMax();
 
     public static int estimatedEnergyCost(int distancia){return distancia;}
+
+    @Override
+    public void charge() {
+        energia = 100;
+    }
 }

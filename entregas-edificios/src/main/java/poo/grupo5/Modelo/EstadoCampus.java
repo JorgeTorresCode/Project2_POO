@@ -8,12 +8,10 @@ import java.io.Serializable;
 
 public class EstadoCampus implements Serializable {
     public CampusMap campusMap;
-    public AdmVehiculos admVehiculos;
     public AdmPedidos admPedidos;
 
-    public EstadoCampus(CampusMap campus, AdmVehiculos admVehiculos, AdmPedidos admPedidos) {
+    public EstadoCampus(CampusMap campus, AdmPedidos admPedidos) {
         this.campusMap = campus;
-        this.admVehiculos = admVehiculos;
         this.admPedidos = admPedidos;
     }
 }

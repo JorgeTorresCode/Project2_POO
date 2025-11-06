@@ -13,23 +13,23 @@ import java.util.Collection;
 
 public class Control implements Serializable {
     private CampusMap campusMap;
-    private AdmVehiculos admVehiculos;
     private AdmPedidos admPedidos;
+    private AdmEstructuras admEstructuras;
 
     public Control() {
         campusMap = new CampusMap();
-        admVehiculos = new AdmVehiculos();
         admPedidos = new AdmPedidos();
+        admEstructuras = new AdmEstructuras();
     }
 
     public void crearEdificios(int cantEdificios) {
         for (int i = 0; i < cantEdificios; i++) {
-            campusMap.crearEdificio();
+            campusMap.crearEdificio(admEstructuras.crearEdificio());
         }
     }
 
     public void relacionarEstructuras(String idOrigen, String idDestino, int distancia) {
-        campusMap.agregarAristaDoble(idOrigen, idDestino, distancia);
+        campusMap.agregarAristaDoble(idOrigen, idDestino, distancia,admEstructuras.encontrarEdificio(idOrigen), admEstructuras.encontrarEdificio(idDestino));
     }
 
     public void crearCentroVehiculos() {
@@ -37,20 +37,20 @@ public class Control implements Serializable {
     }
 
     public void crearDrones(int cantidad, int pesoMax, int pesoMin, int consumoBateria) {
-        admVehiculos.crearVehiculo(0, cantidad, pesoMax, pesoMin, consumoBateria);
+        campusMap.crearVehiculo(0, cantidad, pesoMax, pesoMin, consumoBateria);
     }
 
     public void crearRovers(int cantidad, int pesoMax, int pesoMin, int consumoBateria) {
-        admVehiculos.crearVehiculo(1, cantidad, pesoMax, pesoMin, consumoBateria);
+        campusMap.crearVehiculo(1, cantidad, pesoMax, pesoMin, consumoBateria);
     }
 
     public void crearEBikes(int cantidad, int pesoMax, int pesoMin, int consumoBateria) {
-        admVehiculos.crearVehiculo(2, cantidad, pesoMax, pesoMin, consumoBateria);
+        campusMap.crearVehiculo(2, cantidad, pesoMax, pesoMin, consumoBateria);
     }
 
     public void generarPedido(String desc, double peso, Edificio origen, Edificio destino) throws MiExcepcion {
         int distancia = 30;
-        Vehiculo vehiculo = admVehiculos.buscarVehiculoIndicado(distancia, peso);
+        Vehiculo vehiculo = campusMap.buscarVehiculoIndicado(distancia, peso);
         admPedidos.crearPedido(desc, peso, origen, destino, vehiculo.getId(), distancia);
     }
 
@@ -60,17 +60,17 @@ public class Control implements Serializable {
 
     public void terminarPedido() {
         String id = admPedidos.TerminarPedido();
-        admVehiculos.liberarVehiculo(id);
+        campusMap.liberarVehiculo(id);
     }
 
     public Collection<Integer> consultarEnergiaPorVehiculo() {
         ArrayList<Integer> lista1 = admPedidos.distanciaPorVehiculo();
-        return admVehiculos.bateriaPorTipo(lista1);
+        return campusMap.bateriaPorTipo(lista1);
     }
 
     public int consultarEnergiaGeneral() {
         ArrayList<Integer> lista1 = admPedidos.distanciaPorVehiculo();
-        return admVehiculos.bateriaConsumida(lista1);
+        return campusMap.bateriaConsumida(lista1);
     }
 
     public Collection<Integer> consultarTiempoPorVehiculo() {
@@ -82,7 +82,7 @@ public class Control implements Serializable {
     }
 
     public String mostrarEstructuras() {
-        return campusMap.mostrarEstructuras();
+        return admEstructuras.mostrarEstructuras();
     }
 
     public String mostrarAristas() {
@@ -90,18 +90,17 @@ public class Control implements Serializable {
     }
 
     public void guardar() throws IOException {
-        EstadoCampus estado = new EstadoCampus(campusMap, admVehiculos, admPedidos);
+        EstadoCampus estado = new EstadoCampus(campusMap, admPedidos);
         GestorArchivos.guardarEstado(estado, "Campus.dat");
     }
 
     public void cargar() throws IOException, ClassNotFoundException {
         EstadoCampus estado = GestorArchivos.cargarEstado("Campus.dat");
         this.campusMap = estado.campusMap;
-        this.admVehiculos = estado.admVehiculos;
         this.admPedidos = estado.admPedidos;
     }
 
     public Collection<Estructura> consultarEstructuras() {
-        return campusMap.getPuntosDelCampus();
+        return admEstructuras.getPuntosDelCampus();
     }
 }
