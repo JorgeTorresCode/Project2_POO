@@ -153,7 +153,6 @@ public class ConfiguracionPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
         String seleccionado = (String) jComboBox1.getSelectedItem(); 
     
         int numeroEdificios = Integer.parseInt(seleccionado);
@@ -163,19 +162,22 @@ public class ConfiguracionPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        String seleccionado = (String) jComboBox1.getSelectedItem();
+        assert seleccionado != null;
+        int numeroEdificios = Integer.parseInt(seleccionado);
+        control.crearCentroVehiculos();
+        control.crearEdificios(numeroEdificios);
+
         Collection<poo.grupo5.Modelo.Estructuras.Estructura> estTmp = control.consultarEstructuras();
         ArrayList<poo.grupo5.Modelo.Estructuras.Estructura> estructuras = new ArrayList<>(estTmp);
-
-    for (int i = 0; i < estructuras.size(); i++) {
-    for (int j = i + 1; j < estructuras.size(); j++) {
-        String st1 = estructuras.get(i).getId();
-        String st2 = estructuras.get(j).getId();
-        control.relacionarEstructuras(st1, st2, 5 + (int)(Math.random() * 496));
+        for (int i = 0; i < estructuras.size(); i++) {
+            for (int j = i + 1; j < estructuras.size(); j++) {
+                String st1 = estructuras.get(i).getId();
+                String st2 = estructuras.get(j).getId();
+                control.relacionarEstructuras(st1, st2, 5 + (int)(Math.random() * 496));
+            }
         }
-    
-    }
-    guiController.showVehiculoPanel();
+        guiController.showVehiculoPanel();
     }//GEN-LAST:event_jButton2ActionPerformed
 
 

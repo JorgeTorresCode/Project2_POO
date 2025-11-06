@@ -17,13 +17,11 @@ public class DistanciasPanel extends JPanel {
     private GuiController guiController;
     private Control control;
 
-   
     private ArrayList<Estructura> estructuras;
     private ArrayList<int[]> mapaPares;
     private Map<int[], JSlider> slidersMap;
 
-    
-    private JPanel contenido; 
+    private JPanel contenido;
     private JButton botonGuardar;
 
     public DistanciasPanel(GuiController guiController, Control control) {
@@ -31,45 +29,43 @@ public class DistanciasPanel extends JPanel {
         this.control = control;
 
         inicializarUI();
-        prepararDatos(); 
+        prepararDatos();
     }
 
-    
+
     private void inicializarUI() {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
-        
+
         contenido = new JPanel();
         contenido.setLayout(new BoxLayout(contenido, BoxLayout.Y_AXIS));
         contenido.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        
+
         JScrollPane scroll = new JScrollPane(contenido);
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         add(scroll, BorderLayout.CENTER);
 
-        
+
         botonGuardar = new JButton("Guardar distancias");
         botonGuardar.addActionListener(e -> guardarRelaciones());
         add(botonGuardar, BorderLayout.SOUTH);
     }
 
-    
+
     public void prepararDatos() {
         Collection<poo.grupo5.Modelo.Estructuras.Estructura> estTmp = control.consultarEstructuras();
         estructuras = new ArrayList<>(estTmp);
         mapaPares = new ArrayList<>();
         slidersMap = new HashMap<>();
 
-        
+
         for (int i = 0; i < estructuras.size(); i++) {
             for (int j = i + 1; j < estructuras.size(); j++) {
                 mapaPares.add(new int[]{i, j});
             }
         }
-        System.out.println("Estructuras encontradas: " + estructuras.size());
-        System.out.println("Pares a generar: " + mapaPares.size());
         generarSliders();
     }
 
@@ -108,7 +104,6 @@ public class DistanciasPanel extends JPanel {
             centro.add(valorLabel, BorderLayout.EAST);
 
             fila.add(centro, BorderLayout.CENTER);
-            System.out.println("Generando slider para: " + a.getId() + " y " + b.getId());
             contenido.add(fila);
 
             slidersMap.put(par, slider);
@@ -118,7 +113,7 @@ public class DistanciasPanel extends JPanel {
         contenido.repaint();
     }
 
-    
+
     private void guardarRelaciones() {
         for (int[] par : mapaPares) {
             Estructura a = estructuras.get(par[0]);
@@ -126,7 +121,7 @@ public class DistanciasPanel extends JPanel {
             int valor = slidersMap.get(par).getValue();
             control.relacionarEstructuras(a.getId(), b.getId(), valor);
         }
-        JOptionPane.showMessageDialog(this, "Relaciones guardadas correctamente.");
+        System.out.println(control.mostrarAristas());
         guiController.showVehiculoPanel();
     }
 }

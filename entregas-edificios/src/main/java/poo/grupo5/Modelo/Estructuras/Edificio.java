@@ -15,12 +15,4 @@ public class Edificio extends Estructura implements Serializable {
     public String toString() {
         return "Edificio{" + "id=" + id + '}';
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Edificio otroEdificio = (Edificio) obj;
-        return id != null && id.equals(otroEdificio.id);
-    }
 }

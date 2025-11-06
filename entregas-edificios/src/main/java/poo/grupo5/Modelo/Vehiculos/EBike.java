@@ -20,5 +20,10 @@ public class EBike extends Vehiculo implements Serializable {
     @Override
     public double getVolumenMin(){return volumenMin;}
     public double getVolumenMax(){return volumenMax;}
-    public static int estimatedEnergyCost(int distancia){return distancia/10 *consumoDistancia;}
+    public static int estimatedEnergyCost(int distancia){return distancia/100 *consumoDistancia;}
+
+    @Override
+    public String toString() {
+        return "EBike{id=" + getId() + ", volumenMax=" + volumenMax + ", volumenMin" + volumenMin + "}";
+    }
 }

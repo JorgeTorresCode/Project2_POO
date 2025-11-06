@@ -9,16 +9,16 @@ import poo.grupo5.Logica.Control;
  *
  * @author yiyib
  */
-public class VehiculosPanel extends javax.swing.JPanel {
+public class DronesPanel extends javax.swing.JPanel {
     private Control control;
      private GuiController  guiController;
     /**
      * Creates new form VehiculosPanel
      */
-    public VehiculosPanel() {
+    public DronesPanel() {
         initComponents();
     }
-    public VehiculosPanel(GuiController guiController, Control control){
+    public DronesPanel(GuiController guiController, Control control){
         initComponents();
         this.guiController = guiController;
         this.control = control;
@@ -57,13 +57,23 @@ public class VehiculosPanel extends javax.swing.JPanel {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel5.setText("Cantidad de energía cosumida por 100 unidades de distancia:");
 
-        jTextField1.setText("Cantidad");
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
 
-        jTextField2.setText("Máximo");
+        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField3ActionPerformed(evt);
+            }
+        });
 
-        jTextField3.setText("Energía");
-
-        jTextField4.setText("Mínimo");
+        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField4ActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("Crear Vehículos");
         jButton1.setActionCommand("JButton1");
@@ -138,32 +148,43 @@ public class VehiculosPanel extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-        int cantidad = Integer.parseInt(jTextField1.getText());  // Cantidad
-        int pesoMax = Integer.parseInt(jTextField2.getText());   // Máximo
-        int energia = Integer.parseInt(jTextField3.getText());   // Energía
-        int pesoMin = Integer.parseInt(jTextField4.getText());   // Mínimo
-        if (cantidad <= 0 || pesoMax <= 0 || energia <= 0 || pesoMin <= 0) {
+            int cantidad = Integer.parseInt(jTextField1.getText());  // Cantidad
+            double pesoMax = Double.parseDouble(jTextField2.getText());   // Máximo
+            int energia = Integer.parseInt(jTextField3.getText());   // Energía
+            double pesoMin = Double.parseDouble(jTextField4.getText());   // Mínimo
+            if (cantidad <= 0 || pesoMax <= 0 || energia <= 0 || pesoMin <= 0) {
+                JOptionPane.showMessageDialog(this,
+                "Ingrese Valores Positivos",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            } else {
+                control.crearDrones(cantidad, pesoMax, pesoMin, energia);
+                JOptionPane.showMessageDialog(this,
+                "Drones creados con éxito",
+                "Éxito",
+                JOptionPane.INFORMATION_MESSAGE);
+                System.out.println();
+                guiController.showRoversPanel();
+            }
+        } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this,
-            "Ingrese Valores Positivos",
-            "Error",
-            JOptionPane.ERROR_MESSAGE);
-        } else {
-            
-            control.crearDrones(cantidad, pesoMax, pesoMin, energia);
-
-            JOptionPane.showMessageDialog(this,
-            "Drones creados con éxito",
-            "Éxito",
-            JOptionPane.INFORMATION_MESSAGE);
-            guiController.showRoversPanel();
+                "Ingrese Valores Validos",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
         }
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this,
-            "Ingrese Valores Validos",
-            "Error",
-            JOptionPane.ERROR_MESSAGE);
-    }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField4ActionPerformed
+
+    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

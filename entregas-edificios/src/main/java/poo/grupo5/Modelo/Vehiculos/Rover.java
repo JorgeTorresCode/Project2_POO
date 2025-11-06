@@ -12,6 +12,7 @@ public class Rover extends Vehiculo implements Serializable {
         super();
         this.setId(String.format("R-%03d", ultimoId++));
     }
+
     public static void setConsumoDistancia(int consumoDistancia) {Rover.consumoDistancia = consumoDistancia;}
     public static void setVolumenMin (double volumenMin) {Rover.volumenMin = volumenMin;}
     public static void setVolumenMax(double volumenMax) {Rover.volumenMax = volumenMax;}
@@ -19,5 +20,10 @@ public class Rover extends Vehiculo implements Serializable {
     @Override
     public double getVolumenMin(){return volumenMin;}
     public double getVolumenMax(){return volumenMax;}
-    public static int estimatedEnergyCost(int distancia){return distancia/10 *consumoDistancia;}
+    public static int estimatedEnergyCost(int distancia){return distancia/100 *consumoDistancia;}
+
+    @Override
+    public String toString() {
+        return "Rover{id=" + getId() + ", volumenMax=" + volumenMax + ", volumenMin" + volumenMin + "}";
+    }
 }

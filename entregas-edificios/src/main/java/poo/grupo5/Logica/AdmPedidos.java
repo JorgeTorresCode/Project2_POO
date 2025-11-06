@@ -1,5 +1,6 @@
 package poo.grupo5.Logica;
 
+import poo.grupo5.Enumerates.EstadoPedido;
 import poo.grupo5.Excepciones.MiExcepcion;
 import poo.grupo5.Modelo.Estructuras.Edificio;
 import poo.grupo5.Modelo.Pedido;
@@ -26,23 +27,23 @@ public class AdmPedidos implements Serializable {
         this.listaPedidosRealizados = new ArrayList<>();
     }
 
-    public boolean crearPedido(String desc, double volume, Edificio edificioOrigen, Edificio edificioDestino, String vehiculoID, int distancia) {
-        Pedido pedido = new Pedido(desc,volume,edificioOrigen,edificioDestino,vehiculoID, distancia);
-        listaPedidos.add(pedido);
-        return true;
+    public boolean crearPedido(String descripcion, double peso, Edificio origen, Edificio destino,  String vehiculoID, int distancia, LocalDateTime fechaInicio) {
+        return listaPedidos.add(new Pedido(descripcion, peso, origen, destino, vehiculoID, distancia, fechaInicio));
     }
 
     public void realizarPedido() throws MiExcepcion {
         if (listaPedidosRealizados.isEmpty()){throw new MiExcepcion(4);}
         Pedido pedido = listaPedidos.poll();
-        pedido.setFechaInicio(LocalDateTime.now());
-        pedido.CambiarEtapa();
-        }
+        assert pedido != null;
+        pedido.asignarEstado(EstadoPedido.PREPARACION);
+        listaPedidosEnProgreso.add(pedido);
+    }
 
-    public String TerminarPedido() {
+    public String terminarPedidos() {
         Pedido pedido = listaPedidosEnProgreso.poll();
+        assert pedido != null;
         pedido.setFechaFin(LocalDateTime.now());
-        pedido.CambiarEtapa();
+        pedido.setEstadoPedido(EstadoPedido.ENTREGADO);
         listaPedidosRealizados.add(pedido);
         return pedido.getVehiculoID();
     }
@@ -134,5 +135,14 @@ public class AdmPedidos implements Serializable {
         resp +=  cuentaRoversT / cuentaRover;
         resp += cuentaBikesT / cuentaEBikes;
         return resp;
+    }
+
+    public String mostrarPedidos() {
+        StringBuilder sb = new StringBuilder();
+        for (Pedido pedido : listaPedidos) {
+            sb.append(pedido.toString())
+                    .append("\n");
+        }
+        return sb.toString();
     }
 }

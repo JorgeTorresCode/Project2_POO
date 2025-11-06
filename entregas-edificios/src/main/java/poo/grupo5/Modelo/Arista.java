@@ -6,20 +6,21 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Arista implements Serializable {
-    private Estructura destino;
+    private String destino;
     private int distancia;
 
-    public Arista(Estructura destino, int distancia) {
+    public Arista(String destino, int distancia) {
         this.destino = destino;
         this.distancia = distancia;
     }
 
-    public Estructura getDestino() { return destino; }
-    public double getDistancia() { return distancia; }
+    public boolean tieneDestino(String destino) { return destino.equals(this.destino); }
+    public String getDestino() { return destino; }
+    public int getDistancia() { return distancia; }
 
     @Override
     public String toString() {
-        return "Arista{" + "destino=" + destino + ", distancia=" + distancia + '}';
+        return "Arista{destino=" + destino + ", distancia=" + distancia + '}';
     }
 
     @Override

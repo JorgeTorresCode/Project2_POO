@@ -6,7 +6,7 @@ import poo.grupo5.Modelo.Pedido;
 
 import java.io.Serializable;
 
-public abstract class Vehiculo implements Trackable, Chargable, Serializable {
+public abstract class Vehiculo implements Chargable, Serializable {
     protected String id;
     protected int energia;
     protected Pedido tareaActual;
@@ -17,6 +17,7 @@ public abstract class Vehiculo implements Trackable, Chargable, Serializable {
         estado = EstadoVehiculo.DISPONIBLE;
         tareaActual = null;
     }
+
     public void setId(String id) { this.id = id; }
     public void setEnergia(int energia) { this.energia = energia; }
     public void setEstado(EstadoVehiculo estado) {this.estado = estado;}

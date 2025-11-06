@@ -12,68 +12,49 @@ import java.util.*;
 
 public class CampusMap implements Serializable {
     private Map<String, ArrayList<Arista>> adyacencia;
-    private CentroVehiculos centroVehiculos;
 
-    public CampusMap () {
+    public CampusMap() {
         this.adyacencia = new HashMap<>();
-        this.centroVehiculos = new CentroVehiculos(1024);
     }
 
-    public void crearEdificio(String id) {
+    public void agregarNodo(String id) {
         adyacencia.put(id, new ArrayList<>());
     }
 
-    public void crearCentro() {
-        Estructura nueva =  new CentroVehiculos(1000);
-
-        adyacencia.put(nueva.getId(), new ArrayList<>());
+    public void agregarArista(String origen, String destino, int distancia) {
+        if (adyacencia.containsKey(origen) && adyacencia.containsKey(destino)) {
+            adyacencia.get(origen).add(new Arista(destino, distancia));
+            adyacencia.get(destino).add(new Arista(origen, distancia));
+        } else {
+            System.out.println("ERROR: Nodos no existen - " + origen + " o " + destino);
+        }
     }
 
-    public void agregarAristaDoble(String origenId, String destinoId, int distancia, Estructura  origen, Estructura destino) {
-
-        adyacencia.get(origenId).add(new Arista(destino, distancia));
-        adyacencia.get(destinoId).add(new Arista(origen, distancia));
+    public int obtenerDistancia(String origen, String destino) {
+        if (adyacencia.containsKey(origen) && adyacencia.containsKey(destino)) {
+            ArrayList<Arista> arr = adyacencia.get(origen);
+            for (Arista a : arr) {
+                if (a.tieneDestino(destino)) {
+                    return a.getDistancia();
+                }
+            }
+        }
+        return -1;
     }
-
 
     public String mostrarAristas() {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, ArrayList<Arista>> entry : adyacencia.entrySet()) {
-            String id = entry.getKey();
+            String nodo = entry.getKey();
             ArrayList<Arista> aristas = entry.getValue();
-            for (Arista arista : aristas) {
-                String destinoId = arista.getDestino().getId();
-                sb.append(id)
-                        .append(" -> ")
-                        .append(destinoId)
+            for (Arista a : aristas) {
+                sb.append(nodo)
+                        .append("  → ")
+                        .append(a.toString())
                         .append("\n");
             }
+            sb.append("\n");
         }
         return sb.toString();
     }
-
-    public void crearVehiculo(int tipo, int cantidad, double pesoMax, double pesoMin, int consumoBateria) {
-        centroVehiculos.crearVehiculo(tipo, cantidad, pesoMax, pesoMin, consumoBateria);
-    }
-
-    // Delegar la búsqueda de un vehículo según el peso y la distancia
-    public Vehiculo buscarVehiculoIndicado(int distancia, double peso) throws MiExcepcion {
-        return centroVehiculos.buscarVehiculoIndicado(distancia, peso);
-    }
-
-    // Delegar la liberación de un vehículo por su ID
-    public void liberarVehiculo(String id) {
-        centroVehiculos.liberarVehiculo(id);
-    }
-
-    // Delegar la obtención de la batería por tipo de vehículo
-    public Collection<Integer> bateriaPorTipo(ArrayList<Integer> lista1) {
-        return centroVehiculos.bateriaPorTipo(lista1);
-    }
-
-    // Delegar la batería consumida
-    public int bateriaConsumida(ArrayList<Integer> lista1) {
-        return centroVehiculos.bateriaConsumida(lista1);
-    }
 }
-

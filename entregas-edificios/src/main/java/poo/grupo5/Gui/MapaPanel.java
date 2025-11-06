@@ -14,7 +14,7 @@ import poo.grupo5.Logica.Control;
 public class MapaPanel extends javax.swing.JPanel {
     private GuiController guiController;
     Control control = new Control();
-    private PaintMap mapPanel = new PaintMap();
+    private PaintMap mapPanel = new PaintMap(control.getCampusMap());
 
     /**
      * Creates new form MapaPanel

@@ -8,6 +8,7 @@ import poo.grupo5.Modelo.Vehiculos.Vehiculo;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -24,34 +25,36 @@ public class Control implements Serializable {
 
     public void crearEdificios(int cantEdificios) {
         for (int i = 0; i < cantEdificios; i++) {
-            campusMap.crearEdificio(admEstructuras.crearEdificio());
+            String id = admEstructuras.crearEdificio();
+            campusMap.agregarNodo(id);
         }
     }
 
-    public void relacionarEstructuras(String idOrigen, String idDestino, int distancia) {
-        campusMap.agregarAristaDoble(idOrigen, idDestino, distancia,admEstructuras.encontrarEdificio(idOrigen), admEstructuras.encontrarEdificio(idDestino));
+    public void relacionarEstructuras(String origen, String destino, int distancia) {
+        campusMap.agregarArista(origen, destino, distancia);
     }
 
     public void crearCentroVehiculos() {
-        campusMap.crearCentro();
+        String id = admEstructuras.crearCentro();
+        campusMap.agregarNodo(id);
     }
 
-    public void crearDrones(int cantidad, int pesoMax, int pesoMin, int consumoBateria) {
-        campusMap.crearVehiculo(0, cantidad, pesoMax, pesoMin, consumoBateria);
+    public void crearDrones(int cantidad, double pesoMax, double pesoMin, int consumoBateria) {
+        admEstructuras.crearVehiculos(0, cantidad, pesoMax, pesoMin, consumoBateria);
     }
 
-    public void crearRovers(int cantidad, int pesoMax, int pesoMin, int consumoBateria) {
-        campusMap.crearVehiculo(1, cantidad, pesoMax, pesoMin, consumoBateria);
+    public void crearRovers(int cantidad, double pesoMax, double pesoMin, int consumoBateria) {
+        admEstructuras.crearVehiculos(1, cantidad, pesoMax, pesoMin, consumoBateria);
     }
 
-    public void crearEBikes(int cantidad, int pesoMax, int pesoMin, int consumoBateria) {
-        campusMap.crearVehiculo(2, cantidad, pesoMax, pesoMin, consumoBateria);
+    public void crearEBikes(int cantidad, double pesoMax, double pesoMin, int consumoBateria) {
+        admEstructuras.crearVehiculos(2, cantidad, pesoMax, pesoMin, consumoBateria);
     }
 
-    public void generarPedido(String desc, double peso, Edificio origen, Edificio destino) throws MiExcepcion {
-        int distancia = 30;
-        Vehiculo vehiculo = campusMap.buscarVehiculoIndicado(distancia, peso);
-        admPedidos.crearPedido(desc, peso, origen, destino, vehiculo.getId(), distancia);
+    public void generarPedido(String descripcion, double peso, Edificio origen, Edificio destino, LocalDateTime fechaInicio) throws MiExcepcion {
+        int distancia = campusMap.obtenerDistancia(origen.getId(), destino.getId());
+        Vehiculo vehiculo = admEstructuras.buscarVehiculoIndicado(distancia, peso);
+        admPedidos.crearPedido(descripcion, peso, origen, destino, vehiculo.getId(), distancia, fechaInicio);
     }
 
     public void empezarPedido() throws MiExcepcion {
@@ -59,18 +62,18 @@ public class Control implements Serializable {
     }
 
     public void terminarPedido() {
-        String id = admPedidos.TerminarPedido();
-        campusMap.liberarVehiculo(id);
+        String id = admPedidos.terminarPedidos();
+        admEstructuras.liberarVehiculo(id);
     }
 
     public Collection<Integer> consultarEnergiaPorVehiculo() {
         ArrayList<Integer> lista1 = admPedidos.distanciaPorVehiculo();
-        return campusMap.bateriaPorTipo(lista1);
+        return admEstructuras.bateriaPorTipo(lista1);
     }
 
     public int consultarEnergiaGeneral() {
         ArrayList<Integer> lista1 = admPedidos.distanciaPorVehiculo();
-        return campusMap.bateriaConsumida(lista1);
+        return admEstructuras.bateriaConsumida(lista1);
     }
 
     public Collection<Integer> consultarTiempoPorVehiculo() {
@@ -89,8 +92,16 @@ public class Control implements Serializable {
         return campusMap.mostrarAristas();
     }
 
+    public String mostrarVehiculos() {
+        return admEstructuras.mostrarVehiculos();
+    }
+
+    public String mostrarPedidos() {
+        return admPedidos.mostrarPedidos();
+    }
+
     public void guardar() throws IOException {
-        EstadoCampus estado = new EstadoCampus(campusMap, admPedidos);
+        EstadoCampus estado = new EstadoCampus(campusMap, admPedidos, admEstructuras);
         GestorArchivos.guardarEstado(estado, "Campus.dat");
     }
 
@@ -98,9 +109,22 @@ public class Control implements Serializable {
         EstadoCampus estado = GestorArchivos.cargarEstado("Campus.dat");
         this.campusMap = estado.campusMap;
         this.admPedidos = estado.admPedidos;
+        this.admEstructuras = estado.admEstructuras;
     }
 
     public Collection<Estructura> consultarEstructuras() {
-        return admEstructuras.getPuntosDelCampus();
+        return admEstructuras.getEstructuras();
+    }
+
+    public Collection<Edificio> consultarEdificios() {
+        return admEstructuras.getEdificios();
+    }
+
+    public Collection<Vehiculo> consultarVehiculos() {
+        return admEstructuras.getVehiculosCentros();
+    }
+
+    public CampusMap getCampusMap() {
+        return campusMap;
     }
 }
